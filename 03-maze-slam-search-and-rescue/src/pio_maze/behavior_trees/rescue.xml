@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+  Search & Rescue behaviour tree (Assignment 3, Part 2).
+
+  Victims (WORLD coordinates; the navigation map is aligned to the world frame):
+    A: (-7.0, -1.0)  DEAD
+    B: ( 9.0,  4.0)  ALIVE
+    C: ( 8.0, -8.5)  ALIVE
+  Base / start: (-7.0, -6.5)
+
+  Per victim: navigate there, then
+    Fallback:
+      [IsAlive] -> DeployKit (print + hold 5 s)
+      else      -> RetrieveBody (print) -> return to base (deliver body)
+  Finally return to base and announce completion.
+-->
+<root BTCPP_format="4" main_tree_to_execute="Rescue">
+  <BehaviorTree ID="Rescue">
+    <Sequence name="mission">
+
+      <!-- Victim A : DEAD -->
+      <NavigateTo loc="A (-7.0,-1.0)" x="-7.0" y="-1.0"/>
+      <Fallback>
+        <Sequence>
+          <IsAlive status="DEAD"/>
+          <DeployKit loc="A (-7.0,-1.0)" seconds="5.0"/>
+        </Sequence>
+        <Sequence>
+          <RetrieveBody loc="A (-7.0,-1.0)"/>
+          <NavigateTo loc="BASE (-7.0,-6.5)" x="-7.0" y="-6.5"/>
+        </Sequence>
+      </Fallback>
+
+      <!-- Victim B : ALIVE -->
+      <NavigateTo loc="B (9.0,4.0)" x="9.0" y="4.0"/>
+      <Fallback>
+        <Sequence>
+          <IsAlive status="ALIVE"/>
+          <DeployKit loc="B (9.0,4.0)" seconds="5.0"/>
+        </Sequence>
+        <Sequence>
+          <RetrieveBody loc="B (9.0,4.0)"/>
+          <NavigateTo loc="BASE (-7.0,-6.5)" x="-7.0" y="-6.5"/>
+        </Sequence>
+      </Fallback>
+
+      <!-- Victim C : ALIVE -->
+      <NavigateTo loc="C (8.0,-8.5)" x="8.0" y="-8.5"/>
+      <Fallback>
+        <Sequence>
+          <IsAlive status="ALIVE"/>
+          <DeployKit loc="C (8.0,-8.5)" seconds="5.0"/>
+        </Sequence>
+        <Sequence>
+          <RetrieveBody loc="C (8.0,-8.5)"/>
+          <NavigateTo loc="BASE (-7.0,-6.5)" x="-7.0" y="-6.5"/>
+        </Sequence>
+      </Fallback>
+
+      <!-- Return to base -->
+      <NavigateTo loc="BASE (-7.0,-6.5)" x="-7.0" y="-6.5"/>
+      <SaySomething message="Search and rescue mission complete."/>
+
+    </Sequence>
+  </BehaviorTree>
+</root>

@@ -1,0 +1,20 @@
+# colcon workspace output
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+*.save
+.DS_Store
+Thumbs.db
+
+# Runtime output of camera_navigator
+**/camera_images/

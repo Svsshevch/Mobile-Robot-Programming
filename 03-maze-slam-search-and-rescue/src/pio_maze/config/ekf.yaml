@@ -1,0 +1,37 @@
+# robot_localization EKF: fuses wheel odometry (/odom) with the IMU (/imu) and
+# publishes the odom -> base_footprint transform. The IMU supplies the heading
+# reference that wheel odometry lacks, so the estimated yaw does not drift.
+ekf_filter_node:
+  ros__parameters:
+    use_sim_time: true
+    frequency: 30.0
+    sensor_timeout: 0.2
+    two_d_mode: true                 # planar robot: zero z/roll/pitch
+    publish_tf: true
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_footprint
+    world_frame: odom                # EKF provides odom -> base_footprint
+
+    # wheel odometry: trust forward velocity (and its yaw rate)
+    odom0: /odom
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true,  false, false,
+                   false, false, true,
+                   false, false, false]
+    odom0_differential: false
+    odom0_queue_size: 10
+
+    # IMU: trust absolute heading (yaw) and yaw rate
+    imu0: /imu
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_differential: false
+    imu0_relative: true              # treat first IMU yaw as zero (aligns with odom start)
+    imu0_queue_size: 10
+    imu0_remove_gravitational_acceleration: true

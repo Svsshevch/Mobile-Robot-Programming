@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+
+<robot name="pio" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- ===================== parameters ===================== -->
+  <xacro:property name="wheel_radius"     value="0.040"/>
+  <xacro:property name="wheel_width"      value="0.020"/>
+  <xacro:property name="wheel_separation" value="0.180"/>   <!-- wheels at +/-0.09 -->
+  <xacro:property name="base_x"           value="0.200"/>
+  <xacro:property name="base_y"           value="0.150"/>
+  <xacro:property name="base_z"           value="0.080"/>
+  <!-- raise the chassis box so its bottom clears the ground/wheels -->
+  <xacro:property name="base_zoff"        value="0.050"/>
+  <xacro:property name="caster_radius"    value="0.015"/>
+  <xacro:property name="lidar_z"          value="0.110"/>   <!-- above base_link -->
+
+  <!-- inertia helpers -->
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12.0}" ixy="0" ixz="0"
+               iyy="${m*(x*x+z*z)/12.0}" iyz="0"
+               izz="${m*(x*x+y*y)/12.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cyl_inertia" params="m r l">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+l*l)/12.0}" ixy="0" ixz="0"
+               iyy="${m*(3*r*r+l*l)/12.0}" iyz="0"
+               izz="${m*r*r/2.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="sphere_inertia" params="m r">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${2*m*r*r/5.0}" ixy="0" ixz="0"
+               iyy="${2*m*r*r/5.0}" iyz="0" izz="${2*m*r*r/5.0}"/>
+    </inertial>
+  </xacro:macro>
+
+  <!-- ===================== footprint / base ===================== -->
+  <link name="base_footprint"/>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${base_zoff}" rpy="0 0 0"/>
+      <geometry><box size="${base_x} ${base_y} ${base_z}"/></geometry>
+      <material name="blue"><color rgba="0.2 0.4 0.8 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${base_zoff}" rpy="0 0 0"/>
+      <geometry><box size="${base_x} ${base_y} ${base_z}"/></geometry>
+    </collision>
+    <!-- inertial kept low (at axle height) for a stable, low CoM -->
+    <xacro:box_inertia m="2.0" x="${base_x}" y="${base_y}" z="${base_z}"/>
+  </link>
+
+  <!-- base_link origin is at the wheel axle height -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child  link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===================== wheels ===================== -->
+  <xacro:macro name="wheel" params="name y_sign">
+    <link name="${name}_wheel_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="black"><color rgba="0.1 0.1 0.1 1"/></material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <xacro:cyl_inertia m="0.05" r="${wheel_radius}" l="${wheel_width}"/>
+    </link>
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child  link="${name}_wheel_link"/>
+      <origin xyz="0 ${y_sign*wheel_separation/2.0} 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel name="left"  y_sign="1.0"/>
+  <xacro:wheel name="right" y_sign="-1.0"/>
+
+  <!-- ===================== casters (front + rear) ===================== -->
+  <!-- frictionless caster spheres for a stable support base -->
+  <xacro:macro name="caster" params="name x">
+    <link name="${name}_caster_link">
+      <visual>
+        <geometry><sphere radius="${caster_radius}"/></geometry>
+        <material name="grey"><color rgba="0.5 0.5 0.5 1"/></material>
+      </visual>
+      <collision>
+        <geometry><sphere radius="${caster_radius}"/></geometry>
+      </collision>
+      <xacro:sphere_inertia m="0.02" r="${caster_radius}"/>
+    </link>
+    <joint name="${name}_caster_joint" type="fixed">
+      <parent link="base_link"/>
+      <child  link="${name}_caster_link"/>
+      <!-- sphere bottom touches ground: z = caster_radius - wheel_radius -->
+      <origin xyz="${x} 0 ${caster_radius - wheel_radius}" rpy="0 0 0"/>
+    </joint>
+    <gazebo reference="${name}_caster_link">
+      <material>Gazebo/Grey</material>
+      <mu1>0.0</mu1><mu2>0.0</mu2>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:caster name="front" x="0.085"/>
+  <xacro:caster name="rear"  x="-0.085"/>
+
+  <!-- ===================== lidar ===================== -->
+  <link name="lidar_link">
+    <visual>
+      <geometry><cylinder radius="0.035" length="0.03"/></geometry>
+      <material name="darkred"><color rgba="0.6 0.1 0.1 1"/></material>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="0.035" length="0.03"/></geometry>
+    </collision>
+    <xacro:cyl_inertia m="0.05" r="0.035" l="0.03"/>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="lidar_link"/>
+    <origin xyz="0 0 ${lidar_z}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===================== imu ===================== -->
+  <link name="imu_link"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="imu_link"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ===================== gazebo: materials ===================== -->
+  <gazebo reference="base_link"><material>Gazebo/Blue</material></gazebo>
+  <gazebo reference="left_wheel_link">
+    <material>Gazebo/Black</material>
+    <mu1>1.0</mu1><mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="right_wheel_link">
+    <material>Gazebo/Black</material>
+    <mu1>1.0</mu1><mu2>1.0</mu2>
+  </gazebo>
+  <!-- ===================== gazebo: diff drive ===================== -->
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${wheel_separation}</wheel_separation>
+      <wheel_radius>${wheel_radius}</wheel_radius>
+      <max_linear_acceleration>1.0</max_linear_acceleration>
+      <topic>cmd_vel</topic>
+      <odom_topic>odom</odom_topic>
+      <tf_topic>tf_gz</tf_topic>            <!-- not bridged; TF comes from the EKF -->
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_footprint</child_frame_id>
+      <odom_publish_frequency>50</odom_publish_frequency>
+    </plugin>
+
+    <plugin filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+    </plugin>
+  </gazebo>
+
+  <!-- ===================== gazebo: lidar ===================== -->
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <update_rate>30</update_rate>
+      <topic>scan</topic>
+      <gz_frame_id>lidar_link</gz_frame_id>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159265</min_angle>
+            <max_angle> 3.14159265</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.12</min>
+          <max>10.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise><type>gaussian</type><mean>0.0</mean><stddev>0.01</stddev></noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <!-- ===================== gazebo: imu ===================== -->
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu">
+      <update_rate>50</update_rate>
+      <topic>imu</topic>
+      <gz_frame_id>imu_link</gz_frame_id>
+      <always_on>true</always_on>
+    </sensor>
+  </gazebo>
+
+</robot>
