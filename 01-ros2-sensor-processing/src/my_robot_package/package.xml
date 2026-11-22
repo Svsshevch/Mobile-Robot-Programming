@@ -4,7 +4,7 @@
   <name>my_robot_package</name>
   <version>0.0.0</version>
   <description>Publisher, subscriber, service/client and action nodes that process simulated GPS sensor readings</description>
-  <maintainer email="your.email@example.com">Svetlana Shevchenko</maintainer>
+  <maintainer email="svshevchenko@edu.aau.at">Svetlana Shevchenko</maintainer>
   <license>MIT</license>
 
   <test_depend>ament_copyright</test_depend>

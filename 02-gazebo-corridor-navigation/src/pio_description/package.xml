@@ -4,7 +4,7 @@
   <name>pio_description</name>
   <version>1.0.0</version>
   <description>Custom two-wheeled PIO robot that autonomously follows walls in a square Gazebo corridor using LIDAR</description>
-  <maintainer email="your.email@example.com">Svetlana Shevchenko</maintainer>
+  <maintainer email="svshevchenko@edu.aau.at">Svetlana Shevchenko</maintainer>
   <author>Alesia Shauchuk</author>
   <author>Vadim Kuznetsov</author>
   <author>Svetlana Shevchenko</author>

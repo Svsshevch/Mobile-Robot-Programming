@@ -4,7 +4,7 @@
   <name>my_robot_interfaces</name>
   <version>0.0.0</version>
   <description>Custom SensorData message and CalibrateGPS action for the GPS sensor-processing assignment</description>
-  <maintainer email="your.email@example.com">Svetlana Shevchenko</maintainer>
+  <maintainer email="svshevchenko@edu.aau.at">Svetlana Shevchenko</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

@@ -14,7 +14,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='Svetlana Shevchenko',
-    maintainer_email='your.email@example.com',
+    maintainer_email='svshevchenko@edu.aau.at',
     description='GPS sensor-processing nodes (topics, services, actions)',
     license='MIT',
     extras_require={
