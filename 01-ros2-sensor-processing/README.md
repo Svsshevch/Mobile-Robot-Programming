@@ -1,6 +1,6 @@
 # Project 1: ROS 2 Sensor Processing
 
-**Individual assignment** · April 2026 · Python / `rclpy` · [Full report (PDF)](docs/report.pdf)
+**Individual assignment** · April 2026 · University of Klagenfurt · Python / `rclpy` · [Full report (PDF)](docs/report.pdf)
 
 A ROS 2 system for a mobile robot with a GPS sensor. Sensor readings (status, temperature and
 x/y/z position) are read from a file, published at 1 Hz and processed by a subscriber that

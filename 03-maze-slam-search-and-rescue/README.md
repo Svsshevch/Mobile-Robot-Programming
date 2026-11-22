@@ -1,6 +1,6 @@
 # Project 3: Maze SLAM and Search & Rescue
 
-**Team project (3 students)** · June 2026 · C++ and Python · Nav2, slam_toolbox, AMCL, robot_localization, BehaviorTree.CPP
+**Team project (3 students)** · June 2026 · University of Klagenfurt · C++ and Python · Nav2, slam_toolbox, AMCL, robot_localization, BehaviorTree.CPP
 · [Full report (PDF)](docs/report.pdf) · [Presentation slides (PDF)](docs/slides.pdf)
 
 The PIO robot starts at (−7.0, −6.5) in an unknown Gazebo maze. It explores the maze **on its own**,
@@ -9,8 +9,14 @@ builds and saves a map, and drives back to the start. Then it uses the saved map
 a behavior tree.
 
 <p align="center">
-  <img src="media/slam_map.png" width="420" alt="Occupancy grid of the maze">
-  <br><em>Map built autonomously with frontier exploration and slam_toolbox (0.05 m/cell)</em>
+  <img src="media/gazebo_maze.png" width="560" alt="The maze world in Gazebo with the PIO robot at the start pose">
+  <br><em>The maze in Gazebo, with the robot at its start pose (bottom left)</em>
+</p>
+
+<p align="center">
+  <img src="media/slam_map.png" width="330" alt="Occupancy grid of the maze">
+  <img src="media/rviz_nav2_path.png" width="320" alt="Nav2 global path on the saved map in RViz">
+  <br><em>Map built autonomously with frontier exploration and slam_toolbox at 0.05 m/cell (left), and a Nav2 path planned on the saved map (right)</em>
 </p>
 
 ## My role

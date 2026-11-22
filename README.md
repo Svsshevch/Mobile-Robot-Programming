@@ -6,15 +6,19 @@
 ![C++](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=cplusplus)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
-Coursework from **Mobile Robot Programming (700.240, Summer Semester 2026)**.
+Coursework from **Mobile Robot Programming (700.240, Summer Semester 2026)** at the
+**University of Klagenfurt** (Alpen-Adria-Universität Klagenfurt, AAU), Austria.
+The course was designed by DI Dr. Tobias Mitterer, BSc.
+
 The three projects build on each other. The first covers the core ROS 2 communication patterns.
 The second is a custom differential-drive robot that navigates a Gazebo world on its own.
 The third is a robot that maps an unknown maze with SLAM and then carries out a
 search-and-rescue mission driven by a behavior tree.
 
 <p align="center">
-  <img src="03-maze-slam-search-and-rescue/media/slam_map.png" width="360" alt="Occupancy grid of the maze built autonomously with slam_toolbox">
-  <br><em>Maze map built autonomously by the robot with frontier exploration and slam_toolbox (Project 3)</em>
+  <img src="03-maze-slam-search-and-rescue/media/gazebo_maze.png" width="480" alt="PIO robot in the Gazebo maze">
+  <img src="03-maze-slam-search-and-rescue/media/rviz_nav2_path.png" width="300" alt="Nav2 path planned on the SLAM map in RViz">
+  <br><em>Project 3: the maze in Gazebo (left), and a Nav2 path planned on the map the robot built itself (right)</em>
 </p>
 
 ## Projects
@@ -80,7 +84,13 @@ sudo apt install ros-jazzy-ros-gz ros-jazzy-navigation2 ros-jazzy-nav2-bringup \
   ros-jazzy-xacro ros-jazzy-cv-bridge
 ```
 
+## Acknowledgements
+
+Thanks to DI Dr. Tobias Mitterer, BSc, who designed the course and its assignments, and to my
+teammates Alesia Shauchuk and Vadim Kuznetsov. The PIO robot concept and the maze world for
+Project 3 were provided as part of the course.
+
 ## License
 
-My code is released under the [MIT License](LICENSE). The maze model in Project 3
+Our code is released under the [MIT License](LICENSE). The maze model in Project 3
 (`models/turtlebot3_playground`) is third-party; its author is credited in its `model.config`.

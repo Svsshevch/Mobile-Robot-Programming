@@ -1,6 +1,6 @@
 # Project 2: Gazebo Corridor Navigation
 
-**Team project (3 students)** · May 2026 · Python, Gazebo Harmonic, `ros_gz_bridge` · [Full report (PDF)](docs/report.pdf)
+**Team project (3 students)** · May 2026 · University of Klagenfurt · Python, Gazebo Harmonic, `ros_gz_bridge` · [Full report (PDF)](docs/report.pdf)
 
 A custom two-wheeled robot with a caster wheel drives laps on its own around a square corridor
 (10 × 10 m outer walls, 4 × 4 m inner walls). It uses LIDAR to follow the walls without hitting
@@ -8,8 +8,9 @@ them, turns 180° on command, records its odometry to a rosbag, and saves a came
 before every turn.
 
 <p align="center">
-  <img src="media/camera_before_180_turn.png" width="420" alt="Onboard camera image taken just before a 180 degree turn">
-  <br><em>Onboard camera image taken automatically just before a 180° turn</em>
+  <img src="media/robot_model_rviz.png" width="368" alt="Robot model with its TF frames in RViz">
+  <img src="media/camera_before_180_turn.png" width="345" alt="Onboard camera image taken just before a 180 degree turn">
+  <br><em>The robot model and its frames in RViz (left), and an onboard camera image saved automatically just before a 180° turn (right)</em>
 </p>
 
 ## My role
